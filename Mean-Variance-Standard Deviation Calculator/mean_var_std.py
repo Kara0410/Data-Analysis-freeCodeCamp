@@ -6,7 +6,7 @@ def calculate(list_of_numbers: list):
     if len(list_of_numbers) != 9:
         raise ValueError("List must contain nine numbers.")
 
-    matrix_3x3 = np.reshape(list_of_numbers, newshape=(3,3))
+    matrix_3x3 = np.reshape(list_of_numbers, newshape=(3, 3))
 
     # axis_1 is for each col and axis_2 is for each row
     axis_1_means = []
