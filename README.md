@@ -1,4 +1,4 @@
-# Scientific Computing with Python
+# Data Analysis with Python
 
 This repository houses my personal solutions to the Data Analysis with Python Certification projects from freeCodeCamp.com. It marks my inaugural venture into utilizing Git and GitHub, enabling me to gain a comprehensive grasp of their functionalities. The projects tackled include:
 
