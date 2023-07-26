@@ -7,10 +7,18 @@ import numpy as np
 df = pd.read_csv("medical_examination.csv")
 
 # Add 'overweight' column
-df['overweight'] = None
+weights = df["weight"]
+heights = df["height"]
+df["BMI"] = weights / (heights / 100)**2
+
+df['overweight'] = (df["BMI"] > 25).astype(int)
 
 # Normalize data by making 0 always good and 1 always bad. If the value of 'cholesterol' or 'gluc' is 1, make the value 0. If the value is more than 1, make the value 1.
-
+# you need to also choose the colum, that why we have written "cholesterol" and "gluc", so we only change that column
+df.loc[df.cholesterol == 1, "cholesterol"] = 0
+df.loc[df.cholesterol > 1, "cholesterol"] = 1
+df.loc[df.gluc == 1, "gluc"] = 0
+df.loc[df.gluc > 1, "gluc"] = 1
 
 # Draw Categorical Plot
 def draw_cat_plot():
