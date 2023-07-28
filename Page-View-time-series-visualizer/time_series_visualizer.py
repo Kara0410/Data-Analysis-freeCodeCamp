@@ -5,21 +5,33 @@ from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 
 # Import data (Make sure to parse dates. Consider setting index column to 'date'.)
-df = None
+df = pd.read_csv("fcc-forum-pageviews.csv")
+# filter via the datetime
+df["date"] = pd.to_datetime(df["date"])
+
+# set index to "date"
+df.set_index("date", inplace=True)
 
 # Clean data
-df = None
+df = df.loc[
+    # filter the data [2.5% - 97.5%]
+    (df['value'] >= df['value'].quantile(0.025)) &
+    (df['value'] <= df['value'].quantile(0.975))
+]
 
 
+print()
 def draw_line_plot():
-    # Draw line plot
+    # Draw line
+    fig, ax = plt.subplots(figsize=(20, 5))
+    ax.set_title("Daily freeCodeCamp Forum Page Views 5/2016-12/2019")
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Page Views")
 
-
-
-
+    plt.plot(df.index, df["value"])
 
     # Save image and return fig (don't change this part)
-    fig.savefig('line_plot.png')
+    plt.savefig('line_plot.png')
     return fig
 
 def draw_bar_plot():
