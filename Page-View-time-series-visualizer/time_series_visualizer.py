@@ -19,8 +19,6 @@ df = df.loc[
     (df['value'] <= df['value'].quantile(0.975))
 ]
 
-
-print()
 def draw_line_plot():
     # Draw line
     fig, ax = plt.subplots(figsize=(20, 5))
@@ -36,13 +34,42 @@ def draw_line_plot():
 
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
-    df_bar = None
+    df_bar = df.copy()
+    # gives me the year and converts the month number to the name of the month
+    df_bar["Years"] = df.index.year
+    df_bar["Months"] = df.index.month_name()
+
+    # create a grouping of categories and apply a function to the categories
+    df_bar = pd.DataFrame(df_bar.groupby(["Years", "Months"], sort=False)["value"].mean().round().astype(int))
+    # rename column
+    df_bar = df_bar.rename(columns={"value": "Mean Values"})
+
+    """
+    When we look at the smaller dataframe, it might still carry the row index of the original dataframe.
+    If the original index are numbers, now we have indexes that are not continuous.
+    Well, pandas has reset_index() function. 
+    So to reset the index to the default integer index beginning at 0.
+    """
+    df_bar = df_bar.reset_index()
 
     # Draw bar plot
+    # Pivot the DF so that there's a column for each month, each row\
+    # represents a year, and the cells have the mean page views for the\
+    # respective year and month
+    df_pivot = pd.pivot_table(df_bar, values="Mean Values", index="Years", columns="Months")
 
+    # Plot a bar chart using the DF
+    ax = df_pivot.plot(kind="bar", edgecolor="black")
 
+    # Get a Matplotlib figure from the axes object for formatting purposes
+    fig = ax.get_figure()
 
+    # Change the plot dimensions (width, height)
+    fig.set_size_inches(8, 7)
 
+    # Change the axes labels
+    ax.set_xlabel("Years")
+    ax.set_ylabel("Average Page Views")
 
     # Save image and return fig (don't change this part)
     fig.savefig('bar_plot.png')
